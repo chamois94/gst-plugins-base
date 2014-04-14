@@ -207,6 +207,7 @@ typedef gboolean (*GstVideoGLTextureUpload) (GstVideoGLTextureUploadMeta *meta, 
  * @texture_orientation: Orientation of the textures
  * @n_textures: Number of textures that are generated
  * @texture_type: Type of each texture
+ * @format: The video format of the data in the uploaded texture
  *
  * Extra buffer metadata for uploading a buffer to an OpenGL texture
  * ID. The caller of gst_video_gl_texture_upload_meta_upload() must
@@ -228,6 +229,9 @@ struct _GstVideoGLTextureUploadMeta {
   gpointer      user_data;
   GBoxedCopyFunc user_data_copy;
   GBoxedFreeFunc user_data_free;
+
+  /* <public> */
+  GstVideoFormat format;
 };
 
 GType gst_video_gl_texture_upload_meta_api_get_type (void);

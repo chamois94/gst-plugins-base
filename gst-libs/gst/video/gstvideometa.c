@@ -563,6 +563,7 @@ gst_buffer_add_video_gl_texture_upload_meta (GstBuffer * buffer,
   meta->user_data = user_data;
   meta->user_data_copy = user_data_copy;
   meta->user_data_free = user_data_free;
+  meta->format = GST_VIDEO_FORMAT_UNKNOWN;
 
   return meta;
 }
