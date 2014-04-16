@@ -74,6 +74,34 @@ Metadata
  "GstVideoCropMeta"
    Contains the cropping region of the video.
 
+ "GstVideoGLTextureUploadMeta"
+   Contains information and a method that allows a GL(ES)-based video sink to
+   upload a texture to the GPU using a hadrware-specific method that is defined
+   by an upstream element (decoder or source).
+
+   Because an uploaded texture can have a different video format than the
+   original buffer which it came from, GstVideoGLTextureUploadMeta has a format
+   field which describes the video format of the texture. In order to negotiate
+   this format, if the hardware implementation allows it, the video sink should
+   advertise its capability of using this Meta and the texture formats it
+   can handle by adding this information on the allocation query using
+   gst_query_add_allocation_meta() with the api GType argument being
+   GST_VIDEO_GL_TEXTURE_UPLOAD_META_API_TYPE and with the params GstStructure
+   argument being a simple GstStructure named "GstVideoGLTextureUploadMetaParams"
+   and having a single G_TYPE_STRING field called "format", which should contain
+   the list of supported texture formats. If the upstream element providing
+   the implementation of this Meta is not capable of producing any supported
+   texture format, it should still add the Meta on the buffers and it's the
+   responsibility of the video sink to fall back to using some other means of
+   uploading the data on a texture.
+
+   GstVideoGLTextureUploadMeta can also be present in video/x-raw caps as a
+   GstCapsFeature. In this case it expresses that a given element can produce
+   or consume buffers that can only be uploaded using a hardware-specific
+   implementation. As a consequence, the "format" field of the caps in this case
+   represents the texture format and the extra format negotiation using the
+   allocation query is not needed. The allocation query should only be used
+   by elements that can optionally add or use GstVideoGLTextureUploadMeta.
 
 Formats
 -------
