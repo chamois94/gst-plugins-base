@@ -215,6 +215,19 @@ typedef gboolean (*GstVideoGLTextureUpload) (GstVideoGLTextureUploadMeta *meta, 
  * ID. The caller of gst_video_gl_texture_upload_meta_upload() must
  * have OpenGL set up and call this from a thread where it is valid
  * to upload something to an OpenGL texture.
+ *
+ * The @format/@width/@height fields exist to help with hardware
+ * implementations that do not keep the original buffer format & size
+ * in the uploaded texture. If @format is not GST_VIDEO_FORMAT_UNKNOWN
+ * or the same as the buffer format, then this means that the upload
+ * will also perform colorspace conversion and the resulting texture
+ * will have the specified @format. If @width & @height are not zero or
+ * the same as the video width & height, then this means that the texture
+ * has a different (bigger probably) size and it needs to be cropped to
+ * the video width & height. This can be done by altering the coordinates
+ * of the texture lookup in the fragment shader by multiplying them with
+ * a vec2 uniform that equals [ video->width / texture->width,
+ * video->height / texture->height ].
  */
 
 struct _GstVideoGLTextureUploadMeta {
